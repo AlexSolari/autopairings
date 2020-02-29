@@ -11,7 +11,7 @@
 <body>
     <header class="navbar navbar-dark bg-dark">
         <div class="logo">
-            <img src="favicon.png" height="36px">
+            <img src="favicon.png" height="36px" alt="A">
             <h4>utopairings</h4>
         </div>
     </header>
@@ -23,6 +23,12 @@
         </section>
         <section id="screen2" class="hidden">
             <h3>Points Destribution</h3>
+            <div class="presets">
+                <h5>Presets:</h5>
+                <input type="button" class="btn btn-outline-primary" value="4-2-2-2" onclick="engine.usePoints(4,2)"/>
+                <input type="button" class="btn btn-outline-primary" value="3-1-1-1" onclick="engine.usePoints(3,1)"/>
+            </div>
+            <h5>Custom:</h5>
             <div class="winners-points points">
                 <strong>winner</strong>
                 <input class="form-control" type="number" min="0" max="10" id="winner" value="3" />
@@ -106,5 +112,21 @@
 
         window.engine = new TournamentEngine();
         engine.checkState();
+    </script>
+    <script>
+        //favicon hack for webredirect hosting
+        function changeFavicon(src) {
+            var link = document.createElement('link'),
+                oldLink = document.getElementById('dynamic-favicon');
+            link.id = 'dynamic-favicon';
+            link.rel = 'shortcut icon';
+            link.href = src;
+            if (oldLink) {
+             document.head.removeChild(oldLink);
+            }
+            document.head.appendChild(link);
+           }
+           
+           changeFavicon("https://alexsolari.github.io/autopairings/favicon.png");
     </script>
 </body>

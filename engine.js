@@ -3,8 +3,8 @@ import PairingService from './services/pairingService.js'
 import RenderService from './services/renderService.js'
 import InputDataProvider from './providers/inputDataProvider.js';
 
-export default class TournamentEngine{
-    constructor(){
+export default class TournamentEngine {
+    constructor() {
         this.Players = [];
         this.Tables = [];
         this.PairingService = new PairingService();
@@ -16,19 +16,19 @@ export default class TournamentEngine{
         this.TournamentInProgress = true;
     }
 
-    get isRoundInProgress(){
+    get isRoundInProgress() {
         let tablesPlaying = this.Tables.filter(t => t.MatchOver == false);
 
         return tablesPlaying.length > 0;
     }
 
-    processPlayerNameInput(event){
-        if (event.keyCode == 13){
+    processPlayerNameInput(event) {
+        if (event.keyCode == 13) {
             this.addPlayer();
         }
     }
 
-    addPlayer(){
+    addPlayer() {
         let name = this.InputProvider.getInputValue("#playerName");
         let newPlayer = new Player(name);
 
@@ -36,23 +36,30 @@ export default class TournamentEngine{
         this.updateUi();
         this.InputProvider.resetAndRefocusOnInput("#playerName");
     }
-    
-    nextRound(){
+
+    nextRound() {
         this.PairingService.initialize(this.Players);
         this.Tables = this.PairingService.makeTables();
 
         this.updateUi();
     }
 
-    updatePoints(){
-        this.WinnerPoints = parseInt(this.InputProvider.getInputValue("#winner"));
-        this.LoserPoints = parseInt(this.InputProvider.getInputValue("#loser"));
-        
+    updatePoints() {
+        let winner = parseInt(this.InputProvider.getInputValue("#winner"));
+        let losers = parseInt(this.InputProvider.getInputValue("#loser"));
+
+        this.usePoints(winner, losers);
+    }
+
+    usePoints(winner, losers) {
+        this.WinnerPoints = winner;
+        this.LoserPoints = losers;
+
         this.updateUi();
         this.setStage(3);
     }
 
-    playerWon(playerId, tableId){
+    playerWon(playerId, tableId) {
         let targetTable = this.Tables.find(t => t.Id == tableId);
         let winner = targetTable.Players.find(p => p.Id == playerId);
         let losers = targetTable.Players.filter(p => p.Id != winner.Id);
@@ -71,7 +78,7 @@ export default class TournamentEngine{
         this.updateUi();
     }
 
-    finish(){
+    finish() {
         this.updateUi();
         this.TournamentInProgress = false;
 
@@ -80,16 +87,16 @@ export default class TournamentEngine{
         this.clearState();
     }
 
-    updateUi(){
+    updateUi() {
         if (!this.TournamentInProgress)
             return;
 
         let getClassFor = (player, table) => {
             let result = "";
-    
+
             if (table.MatchOver && player.Id == table.Winner.Id)
                 result = "winner";
-    
+
             return result;
         };
 
@@ -107,7 +114,7 @@ export default class TournamentEngine{
 
             let templateName = table.MatchOver ? "tableRowFinishedTemplate" : "tableRowTemplate";
             table.Players.forEach(player => {
-                tablePlayersHtml += this.RenderService.render(templateName, {tableId: table.Id, rowClass: getClassFor(player, table), ...player});
+                tablePlayersHtml += this.RenderService.render(templateName, { tableId: table.Id, rowClass: getClassFor(player, table), ...player });
             });
 
             this.RenderService.updateElement(`#table-${table.Id}`, tablePlayersHtml)
@@ -115,16 +122,16 @@ export default class TournamentEngine{
 
         let stagingHtml = "";
         this.Players.sort((p1, p2) => p2.Points - p1.Points).forEach((player, index) => {
-            stagingHtml += this.RenderService.render("stagingRowTemplate", {place: index+1, ...player});
+            stagingHtml += this.RenderService.render("stagingRowTemplate", { place: index + 1, ...player });
         });
 
         this.RenderService.updateElement("#staging", stagingHtml || "<p>No players were added...</p>");
-        
+
         this.RenderService.toggleButton("#nextRoundButton", this.isRoundInProgress);
         this.RenderService.toggleButton("#tournamentEndButton", this.isRoundInProgress);
     }
 
-    saveState(){
+    saveState() {
         let state = {
             WinnerPoints: this.WinnerPoints,
             LoserPoints: this.LoserPoints,
@@ -135,7 +142,7 @@ export default class TournamentEngine{
         localStorage.setItem("state", JSON.stringify(state));
     }
 
-    loadState(){
+    loadState() {
         let state = JSON.parse(localStorage.getItem("state"));
 
         this.WinnerPoints = state.WinnerPoints;
@@ -144,38 +151,38 @@ export default class TournamentEngine{
         this.Tables = state.Tables;
     }
 
-    clearState(){
+    clearState() {
         localStorage.removeItem("state");
     }
 
-    checkState(){
+    checkState() {
         let state = JSON.parse(localStorage.getItem("state"));
         let canLoad = false;
 
-        if (state){
+        if (state) {
             canLoad = true;
-            if (state.Players.length == 0){
+            if (state.Players.length == 0) {
                 canLoad = false;
             }
         }
 
-        if (!canLoad){
+        if (!canLoad) {
             this.skipLoading();
         }
     }
 
-    setStage(stage){
+    setStage(stage) {
         this.Stage = stage;
         this.RenderService.showStageScreen(this.Stage);
     }
 
-    load(){
+    load() {
         this.loadState();
         this.updateUi();
         this.setStage(3);
     }
 
-    skipLoading(){
+    skipLoading() {
         this.updateUi();
         this.setStage(2);
     }
