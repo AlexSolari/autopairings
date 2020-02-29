@@ -1,8 +1,10 @@
 import Table from "../entities/table.js";
+import InputDataProvider from "../providers/inputDataProvider.js"
 
 export default class PairingService {
     constructor() {
         this.Players = [];
+        this.InputDataProvider = new InputDataProvider();
     }
 
     initialize(players) {
@@ -23,7 +25,7 @@ export default class PairingService {
             return chunks;
         };
 
-        const targetPlayerCountPerTable = parseInt(document.querySelector("#playersPerTable").value);
+        const targetPlayerCountPerTable = parseInt(this.InputDataProvider.getInputValue("#playersPerTable"));
         const orderedPlayers = this.Players
             .sort((p1, p2) => Math.random() > 0.5 ? -1 : 1) //shuffle
             .sort((p1, p2) => p2.Points - p1.Points); //sort
