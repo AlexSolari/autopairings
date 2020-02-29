@@ -1,4 +1,4 @@
-import Table from "./table.js";
+import Table from "../entities/table.js";
 
 export default class PairingService {
     constructor() {

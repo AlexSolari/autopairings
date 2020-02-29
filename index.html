@@ -94,13 +94,15 @@
         <strong>{winner}-{loser}-{loser}-{loser}</strong>
     </script>
 
-    <script type="module" src="player.js"></script>
-    <script type="module" src="table.js"></script>
-    <script type="module" src="pairingService.js"></script>
-    <script type="module" src="renderService.js"></script>
-    <script type="module" src="script.js"></script>
+    <script type="module" src="providers/inputDataProvider.js"></script>
+    <script type="module" src="providers/identityProvider.js"></script>
+    <script type="module" src="entities/player.js"></script>
+    <script type="module" src="entities/table.js"></script>
+    <script type="module" src="services/pairingService.js"></script>
+    <script type="module" src="services/renderService.js"></script>
+    <script type="module" src="engine.js"></script>
     <script type="module">
-        import TournamentEngine from './script.js'
+        import TournamentEngine from './engine.js'
 
         window.engine = new TournamentEngine();
         engine.checkState();
