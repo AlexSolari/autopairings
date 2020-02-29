@@ -1,0 +1,103 @@
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8=" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+</head>
+
+<body>
+    <header class="navbar navbar-dark bg-dark">
+        <h4>Autopairings</h4>
+    </header>
+    <div class="content-container jumbotron">
+        <section id="screen1">
+            <h3>Load previous tournameent?</h3>
+            <input class="btn btn-primary" type="button" value="Yes" onclick="engine.load()" />
+            <input class="btn btn-light" type="button" value="No" onclick="engine.skipLoading()" />
+        </section>
+        <section id="screen2" class="hidden">
+            <h3>Points Destribution</h3>
+            <div class="winners-points points">
+                <strong>winner</strong>
+                <input class="form-control" type="number" min="0" max="10" id="winner" value="3" />
+            </div>
+            <div class="loser-points points">
+                <strong>losers</strong>
+                <input class="form-control" type="number" min="0" max="10" id="loser" value="1" />
+            </div>
+            <input type="submit" class="btn btn-primary" onclick="engine.updatePoints()">
+        </section>
+        <section id="screen3" class="hidden">
+            <div class="row remove-at-end">
+                <div class="controls col-md-12">
+                    <div class="player-control form-inline mb-4 mr-sm-4">
+                        <input class="form-control" type="text" id="playerName" placeholder="player name"
+                            onkeypress="engine.processPlayerNameInput(event)">&nbsp;
+                        <input type="button" value="add player" onclick="engine.addPlayer()"
+                            class="btn btn-outline-primary" />
+                    </div>
+                    <div class="rounds-control form-inline">
+                        Try to make&nbsp;<input class="form-control mb-2 mr-sm-2 form-control-sm" type="number" min="2"
+                            max="5" value="4" id="playersPerTable"> players per table
+                    </div>
+                    <input type="button" value="start new round" id="nextRoundButton" onclick="engine.nextRound()"
+                        class="btn btn-primary">
+                </div>
+            </div>
+            <div class="row">
+                <div class="players col-md-3">
+                    <h3>Players</h3>
+                    <ol id="staging" class="list-group">
+                    </ol>
+                </div>
+                <div class="tables col-md-9 remove-at-end">
+                    <h3>Tables</h3>
+                    <div id="tables" class="row row-cols-1 row-cols-md-3">
+                    </div>
+                </div>
+            </div>
+            <div class="row remove-at-end">
+                <div class="controls col-md-12">
+                    <input type="button" class="btn btn-danger" onclick="engine.finish()" value="Finish tournament" id="tournamentEndButton"/>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script type="text/html" id="stagingRowTemplate">
+        <li class="list-group-item d-flex justify-content-between align-items-center"><span class="place">{place}&nbsp;</span><span class="name">{name}</span><span class="badge badge-pill"> {points}</span></li>
+    </script>
+    <script type="text/html" id="tableTemplate">
+        <div class="col mb-3">
+            <div class="card border-secondary" style="max-width: 18rem;">
+                <div class="card-header">Table</div>
+                <div class="card-body text-secondary">
+                    <ul id="table-{id}">
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </script>
+    <script type="text/html" id="tableRowTemplate">
+        <li><span class="name">{name}</span> <button onclick="engine.playerWon('{id}', '{tableId}')" class="playerWon btn btn-outline-success">Victory</button></li>
+    </script>
+    <script type="text/html" id="tableRowFinishedTemplate">
+    <li class="{rowClass}">{name}</li>
+    </script>
+    <script type="text/html" id="pointsTemplate">
+        <strong>{winner}-{loser}-{loser}-{loser}</strong>
+    </script>
+
+    <script type="module" src="player.js"></script>
+    <script type="module" src="table.js"></script>
+    <script type="module" src="pairingService.js"></script>
+    <script type="module" src="renderService.js"></script>
+    <script type="module" src="script.js"></script>
+    <script type="module">
+        import TournamentEngine from './script.js'
+
+        window.engine = new TournamentEngine();
+        engine.checkState();
+    </script>
+</body>

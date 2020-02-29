@@ -1,0 +1,68 @@
+.hidden{
+    display: none;
+    visibility: hidden;
+}
+.content-container{
+    background-color: transparent;
+    text-align: center;
+    margin: 0;
+}
+section{
+    margin: 0;
+}
+#screen2 input{
+    display: inline-block;
+}
+#screen2 .points{
+    margin: .5em;
+    display: inline-block;
+}
+#screen2 .points input{
+    margin-top: .5em;
+}
+#screen2 input[type=submit]{
+    position: relative;
+    bottom: 3px;
+}
+#staging, #tables ul{
+    display: inline-block;
+    text-align: left;
+    padding: 0px 20px;
+}
+#tables ul li{
+    list-style: none;
+}
+.name{
+    min-width: 100px;
+    display: inline-block;
+}
+#staging .name{
+    margin-left: 32px;
+}
+#tables{
+    display: inline-flex;
+}
+#tables em{
+    display: contents;
+}
+#tables li{
+    padding: .3em;
+}
+.controls div{
+    margin-bottom: 1em;
+    display: block;
+}
+.winner{
+    font-weight: bold;
+}
+.place {
+    font-weight: bold;
+    border-right: 1px solid lightgrey;
+    position: absolute;
+    width: 28px;
+    height: 100%;
+    padding: 12px 10px 12px 0;
+}
+header{
+    color: white;
+}
