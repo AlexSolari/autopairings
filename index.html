@@ -1,4 +1,6 @@
 <head>
+    <title>Autopairings</title>
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
     <link rel="stylesheet" href="style.css" />
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
@@ -8,7 +10,10 @@
 
 <body>
     <header class="navbar navbar-dark bg-dark">
-        <h4>Autopairings</h4>
+        <div class="logo">
+            <img src="favicon.png" height="36px">
+            <h4>utopairings</h4>
+        </div>
     </header>
     <div class="content-container jumbotron">
         <section id="screen1">
@@ -83,7 +88,7 @@
         <li><span class="name">{name}</span> <button onclick="engine.playerWon('{id}', '{tableId}')" class="playerWon btn btn-outline-success">Victory</button></li>
     </script>
     <script type="text/html" id="tableRowFinishedTemplate">
-    <li class="{rowClass}">{name}</li>
+        <li class="{rowClass}">{name}</li>
     </script>
     <script type="text/html" id="pointsTemplate">
         <strong>{winner}-{loser}-{loser}-{loser}</strong>

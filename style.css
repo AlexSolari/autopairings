@@ -66,3 +66,15 @@ section{
 header{
     color: white;
 }
+header *{
+    display: inline-block;
+}
+header h4{
+    margin: 0;
+    position: relative;
+    top: 7px;
+    right: 14px;
+}
+.tables{
+    border-left: 1px solid lightgray;
+}
