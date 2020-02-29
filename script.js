@@ -24,10 +24,6 @@ export default class TournamentEngine{
     processPlayerNameInput(event){
         if (event.keyCode == 13){
             this.addPlayer();
-
-            let input = document.querySelector("#playerName");
-            input.value = "";
-            input.focus();
         }
     }
 
@@ -37,6 +33,9 @@ export default class TournamentEngine{
 
         this.Players.push(newPlayer);
         this.updateUi();
+        let input = document.querySelector("#playerName");
+        input.value = "";
+        input.focus();
     }
     
     nextRound(){
