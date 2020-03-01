@@ -3,8 +3,10 @@
     <link rel="icon" type="image/png" sizes="192x192" href="favicon.png">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
     <link rel="stylesheet" href="style.css" />
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-        integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"
+        integrity="sha256-xNjb53/rY+WmG+4L6tTl9m6PpqknWZvRt0rO1SRnJzw=" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
 </head>
 
@@ -16,17 +18,17 @@
         </div>
     </header>
     <div class="content-container jumbotron">
-        <section id="screen1">
+        <section id="screen1" style="display: none;">
             <h3>Load previous tournameent?</h3>
             <input class="btn btn-primary" type="button" value="Yes" onclick="engine.load()" />
             <input class="btn btn-light" type="button" value="No" onclick="engine.skipLoading()" />
         </section>
-        <section id="screen2" class="hidden">
+        <section id="screen2" style="display: none;">
             <h3>Points Destribution</h3>
             <div class="presets">
                 <h5>Presets:</h5>
-                <input type="button" class="btn btn-outline-primary" value="4-2-2-2" onclick="engine.usePoints(4,2)"/>
-                <input type="button" class="btn btn-outline-primary" value="3-1-1-1" onclick="engine.usePoints(3,1)"/>
+                <input type="button" class="btn btn-outline-primary" value="4-2-2-2" onclick="engine.usePoints(4,2)" />
+                <input type="button" class="btn btn-outline-primary" value="3-1-1-1" onclick="engine.usePoints(3,1)" />
             </div>
             <h5>Custom:</h5>
             <div class="winners-points points">
@@ -39,7 +41,7 @@
             </div>
             <input type="submit" class="btn btn-primary" onclick="engine.updatePoints()">
         </section>
-        <section id="screen3" class="hidden">
+        <section id="screen3" style="display: none;">
             <div class="row remove-at-end">
                 <div class="controls col-md-12">
                     <div class="player-control form-inline mb-4 mr-sm-4">
@@ -70,7 +72,8 @@
             </div>
             <div class="row remove-at-end">
                 <div class="controls col-md-12">
-                    <input type="button" class="btn btn-danger" onclick="engine.finish()" value="Finish tournament" id="tournamentEndButton"/>
+                    <input type="button" class="btn btn-danger" onclick="engine.finish()" value="Finish tournament"
+                        id="tournamentEndButton" />
                 </div>
             </div>
         </section>

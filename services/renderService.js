@@ -34,9 +34,13 @@ export default class RenderService{
     }
 
     showStageScreen(stage){
-        let sections = Array.from(document.querySelectorAll("section"));
-        sections.forEach(s => s.className = "hidden");
+        let sections = ["#screen1","#screen2","#screen3"];
+        let sectionToShow = `#screen${stage}`;
+        let sectionsToHide = sections.filter(x => x != sectionToShow);
 
-        document.querySelector(`#screen${stage}`).className = "";
+        sectionsToHide.forEach(section => {
+            $(section).fadeOut();
+        });
+        setTimeout(() => $(sectionToShow).fadeIn(), 400);
     }
 }

@@ -12,7 +12,7 @@ export default class TournamentEngine {
         this.InputProvider = new InputDataProvider();
         this.WinnerPoints = 3;
         this.LoserPoints = 1;
-        this.Stage = 1;
+        this.Stage = 0;
         this.TournamentInProgress = true;
     }
 
@@ -168,6 +168,9 @@ export default class TournamentEngine {
 
         if (!canLoad) {
             this.skipLoading();
+        }
+        else{
+            this.setStage(1);
         }
     }
 
