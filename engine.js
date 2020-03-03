@@ -193,4 +193,16 @@ export default class TournamentEngine {
         this.updateUi();
         this.setStage(2);
     }
+
+    removePlayer(id){
+        if (confirm("Delete this player?")){
+            this.Players = this.Players.filter(p => p.Id != id);
+
+            this.Tables.forEach(table => {
+                table.Players = table.Players.filter(p => p.Id != id);
+            })
+        }
+        
+        this.updateUi();
+    }
 }

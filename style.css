@@ -79,3 +79,15 @@ header h4{
 .tables{
     border-left: 1px solid lightgray;
 }
+.close.delete-player{
+    position: relative;
+    bottom: 2px;
+    left: 4px;
+    opacity: .2 !important;
+}
+.close.delete-player:hover{
+    position: relative;
+    bottom: 2px;
+    left: 4px;
+    opacity: .7 !important;
+}

@@ -80,7 +80,13 @@
     </div>
 
     <script type="text/html" id="stagingRowTemplate">
-        <li class="list-group-item d-flex justify-content-between align-items-center"><span class="place">{place}&nbsp;</span><span class="name">{name}</span><span class="badge badge-pill"> {points}</span></li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <span class="place">{place}&nbsp;</span><span class="name">{name}</span>
+            <span class="badge badge-pill"> {points}</span>
+            <button type="button" class="close delete-player" onclick="engine.removePlayer('{id}')" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </li>
     </script>
     <script type="text/html" id="tableTemplate">
         <div class="col-md-4 col-xs-4 mb-3">
