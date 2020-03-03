@@ -30,7 +30,7 @@ export default class RenderService{
 
     toggleButton(selector, value){
         let button = document.querySelector(selector);
-        button.disabled = value ? "disabled" : undefined;
+        button.disabled = value ? undefined : "disabled";
     }
 
     showStageScreen(stage){

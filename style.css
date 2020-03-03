@@ -41,6 +41,7 @@ section{
 }
 #tables{
     display: inline-flex;
+    width: 100%;
 }
 #tables em{
     display: contents;

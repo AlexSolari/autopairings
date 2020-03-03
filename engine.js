@@ -126,9 +126,13 @@ export default class TournamentEngine {
         });
 
         this.RenderService.updateElement("#staging", stagingHtml || "<p>No players were added...</p>");
+        const targetPlayerCountPerTable = parseInt(this.InputProvider.getInputValue("#playersPerTable"));
+        
+        let canStartRound = this.Players.length >= targetPlayerCountPerTable;
+        let canProceedWithTournament = !this.isRoundInProgress && canStartRound;
 
-        this.RenderService.toggleButton("#nextRoundButton", this.isRoundInProgress);
-        this.RenderService.toggleButton("#tournamentEndButton", this.isRoundInProgress);
+        this.RenderService.toggleButton("#tournamentEndButton", canProceedWithTournament);
+        this.RenderService.toggleButton("#nextRoundButton", canProceedWithTournament);
     }
 
     saveState() {
