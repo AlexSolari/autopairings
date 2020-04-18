@@ -30,10 +30,14 @@ export default class TournamentEngine {
 
     addPlayer() {
         let name = this.InputProvider.getInputValue("#playerName");
-        let newPlayer = new Player(name);
+        
+        if (name) {
+            let newPlayer = new Player(name);
 
-        this.Players.push(newPlayer);
-        this.updateUi();
+            this.Players.push(newPlayer);
+            this.updateUi();
+        }
+
         this.InputProvider.resetAndRefocusOnInput("#playerName");
     }
 
