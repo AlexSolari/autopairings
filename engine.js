@@ -10,6 +10,7 @@ export default class TournamentEngine {
         this.PairingService = new PairingService();
         this.RenderService = new RenderService();
         this.InputProvider = new InputDataProvider();
+        this.Stats = [];
         this.WinnerPoints = 3;
         this.LoserPoints = 1;
         this.Stage = 0;
@@ -35,6 +36,13 @@ export default class TournamentEngine {
             let newPlayer = new Player(name);
 
             this.Players.push(newPlayer);
+            this.Stats.push({
+                Id: newPlayer.Id,
+                Name: newPlayer.Name,
+                Points: newPlayer.Points,
+                OWR: 0,
+                WR: 0
+            })
             this.updateUi();
         }
 
@@ -44,6 +52,14 @@ export default class TournamentEngine {
     nextRound() {
         this.PairingService.initialize(this.Players);
         this.Tables = this.PairingService.makeTables();
+        this.Tables.forEach(t => 
+            t.Players.forEach(p => {
+                let oppsIds = t.Players.filter(x => x != p).map(x => x.Id);
+
+                p.Opponents = [...new Set(p.Opponents.concat(oppsIds))];
+            })
+        );
+        this.Stats = this.PairingService.Stats;
 
         this.updateUi();
     }
@@ -69,8 +85,12 @@ export default class TournamentEngine {
         let losers = targetTable.Players.filter(p => p.Id != winner.Id);
 
         winner.Points += this.WinnerPoints;
+        winner.GamesWon += 1;
+        winner.GamesPlayed += 1;
         losers.forEach(p => {
             p.Points += this.LoserPoints;
+            p.GamesPlayed += 1;
+            p.GamesLost += 1;
         });
 
         targetTable.Winner = winner;
@@ -78,6 +98,10 @@ export default class TournamentEngine {
 
         let players = this.Tables.map(x => x.Players);
         this.Players = [].concat.apply([], players);
+
+        this.PairingService.initialize(this.Players);
+        this.PairingService.recalculateStats();
+        this.Stats = this.PairingService.Stats;
 
         this.updateUi();
     }
@@ -125,7 +149,18 @@ export default class TournamentEngine {
         });
 
         let stagingHtml = "";
-        this.Players.sort((p1, p2) => p2.Points - p1.Points).forEach((player, index) => {
+        this.Stats.sort((p1, p2) => {
+            var pDiff = p2.Points - p1.Points;
+            var owrDiff = p2.OWR - p1.OWR;
+            var wrDiff = p2.WR - p1.WR;
+
+            if (pDiff != 0)
+                return pDiff;
+            else if (owrDiff != 0)
+                return owrDiff;
+            else 
+                return wrDiff;
+        }).forEach((player, index) => {
             stagingHtml += this.RenderService.render("stagingRowTemplate", { place: index + 1, ...player });
         });
 
@@ -145,6 +180,7 @@ export default class TournamentEngine {
             LoserPoints: this.LoserPoints,
             Players: this.Players,
             Tables: this.Tables,
+            Stats: this.Stats,
         }
 
         localStorage.setItem("state", JSON.stringify(state));
@@ -157,6 +193,7 @@ export default class TournamentEngine {
         this.LoserPoints = state.LoserPoints;
         this.Players = state.Players;
         this.Tables = state.Tables;
+        this.Stats = state.Stats;
     }
 
     clearState() {
