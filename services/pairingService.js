@@ -86,20 +86,6 @@ export default class PairingService {
         const playerGroups = chunk(orderedPlayers, targetPlayerCountPerTable);
         const tables = playerGroups.map(group => new Table(group));
 
-        let fullTables = tables.filter(x => x.Players.length == targetPlayerCountPerTable);
-        let invalidTables = tables.filter(x => x.Players.length <= 2);
-        let tries = 0;
-        while (invalidTables.length != 0 || tries >= 10) {
-            tries++;
-
-            let playerToMove = fullTables.reverse()[0].Players.pop();
-            invalidTables[0].Players.push(playerToMove);
-
-            fullTables = tables.filter(x => x.Players.length == targetPlayerCountPerTable);
-            invalidTables = tables.filter(x => x.Players.length <= 2);
-
-        }
-
         this.recalculateStats();
 
         return tables;
