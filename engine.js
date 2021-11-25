@@ -241,7 +241,11 @@ export default class TournamentEngine {
 
             this.Tables.forEach(table => {
                 table.Players = table.Players.filter(p => p.Id != id);
-            })
+            });
+   
+            this.PairingService.initialize(this.Players);
+            this.PairingService.recalculateStats();
+            this.Stats = this.PairingService.Stats;
         }
         
         this.updateUi();
