@@ -5,6 +5,7 @@ import InputDataProvider from './providers/inputDataProvider.js';
 
 export default class TournamentEngine {
     constructor() {
+        this.BackupPlayers = [];
         this.Players = [];
         this.Tables = [];
         this.PairingService = new PairingService();
@@ -14,7 +15,7 @@ export default class TournamentEngine {
         this.WinnerPoints = 3;
         this.LoserPoints = 1;
         this.Stage = 0;
-        this.TournamentInProgress = true;
+        this.TournamentInProgress = false;
     }
 
     get isRoundInProgress() {
@@ -50,6 +51,8 @@ export default class TournamentEngine {
     }
 
     nextRound() {
+        this.BackupPlayers = this.Players;
+        this.TournamentInProgress = true;
         this.PairingService.initialize(this.Players);
         this.Tables = this.PairingService.makeTables();
         this.Tables.forEach(t => 
@@ -110,14 +113,14 @@ export default class TournamentEngine {
         this.updateUi();
         this.TournamentInProgress = false;
 
-        this.RenderService.showResultsScreen()
+        this.RenderService.showResultsScreen();
 
         this.clearState();
     }
 
     updateUi() {
-        if (!this.TournamentInProgress)
-            return;
+        if (this.TournamentInProgress)
+            this.RenderService.hide(".remove-at-start");
 
         let getClassFor = (player, table) => {
             let result = "";
@@ -172,6 +175,8 @@ export default class TournamentEngine {
 
         this.RenderService.toggleButton("#tournamentEndButton", canProceedWithTournament);
         this.RenderService.toggleButton("#nextRoundButton", canProceedWithTournament);
+
+        this.RenderService.finanizeUpdates();
     }
 
     saveState() {
@@ -237,15 +242,21 @@ export default class TournamentEngine {
 
     removePlayer(id){
         if (confirm("Delete this player?")){
-            this.Players = this.Players.filter(p => p.Id != id);
+            if (this.TournamentInProgress){
+                this.Players = this.BackupPlayers.filter(p => p.Id != id);
+            
+                this.nextRound();
+            }else{
+                this.Players = this.Players.filter(p => p.Id != id);
 
-            this.Tables.forEach(table => {
-                table.Players = table.Players.filter(p => p.Id != id);
-            });
-   
-            this.PairingService.initialize(this.Players);
-            this.PairingService.recalculateStats();
-            this.Stats = this.PairingService.Stats;
+                this.Tables.forEach(table => {
+                    table.Players = table.Players.filter(p => p.Id != id);
+                });
+       
+                this.PairingService.initialize(this.Players);
+                this.PairingService.recalculateStats();
+                this.Stats = this.PairingService.Stats;
+            }
         }
         
         this.updateUi();

@@ -42,16 +42,16 @@
             </div>
             <input type="submit" class="btn btn-primary" onclick="engine.updatePoints()">
         </section>
-        <section id="screen3" style="display: none;">
+        <section id="screen3" class="container-fluid" style="display: none;">
             <div class="row remove-at-end">
                 <div class="controls col-md-12">
-                    <div class="player-control form-inline mb-4 mr-sm-4">
+                    <div class="player-control form-inline mb-4 mr-sm-4 remove-at-start">
                         <input class="form-control" type="text" id="playerName" placeholder="player name"
                             onkeypress="engine.processPlayerNameInput(event)">&nbsp;
                         <input type="button" value="Add player" onclick="engine.addPlayer()"
                             class="btn btn-outline-primary" />
                     </div>
-                    <div class="rounds-control form-inline">
+                    <div class="rounds-control form-inline remove-at-start">
                         Try to make&nbsp;<input class="form-control mb-2 mr-sm-2 form-control-sm" type="number" min="2"
                             max="5" value="4" id="playersPerTable"> players per table
                     </div>
@@ -60,12 +60,12 @@
                 </div>
             </div>
             <div class="row">
-                <div class="players col-md-3">
+                <div class="players col-md-4">
                     <h3>Players</h3>
                     <ol id="staging" class="list-group">
                     </ol>
                 </div>
-                <div class="tables col-md-9 remove-at-end">
+                <div class="tables col-md-8 remove-at-end">
                     <h3>Tables</h3>
                     <div id="tables" class="row">
                     </div>
@@ -92,7 +92,7 @@
         </li>
     </script>
     <script type="text/html" id="tableTemplate">
-        <div class="col-md-4 col-xs-4 mb-3">
+        <div class="col-md-6 card-container">
             <div class="card border-secondary" style="max-width: 18rem;">
                 <div class="card-header">Table</div>
                 <div class="card-body text-secondary">

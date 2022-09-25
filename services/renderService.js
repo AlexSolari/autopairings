@@ -1,4 +1,8 @@
 export default class RenderService{
+    constructor(){
+        this.queue = [];
+    }
+
     render(template, values){
         let renderedHtml = document.querySelector(`script#${template}`).innerHTML;;
 
@@ -14,33 +18,60 @@ export default class RenderService{
         return renderedHtml;
     }
 
-    updateElement(target, html){
-        let element = document.querySelector(target);
+    hide(selector){
+        this.queue.push(() => {
+            let nodes = Array.from(document.querySelectorAll(selector));
+            nodes.forEach(n => n.className += " hidden");
+        });
+    }
 
-        element.innerHTML = html;
+    finanizeUpdates(){
+        window.requestAnimationFrame(() => {
+            this.queue.forEach((update) => {
+                update();
+            });
+
+            this.queue = [];
+        });
+    }
+
+    updateElement(target, html){
+        this.queue.push(() => {
+            document.querySelector(target).innerHTML = html;
+        });
     }
 
     showResultsScreen(){
-        let nodes = Array.from(document.querySelectorAll(".remove-at-end"));
-        nodes.forEach(n => n.remove());
+        this.queue.push(() => {
+            let nodes = Array.from(document.querySelectorAll(".remove-at-end"));
+            nodes.forEach(n => n.remove());
+    
+            let playersTable = document.querySelector(".players");
+            playersTable.className = "players col-md-12";
+        });
 
-        let playersTable = document.querySelector(".players");
-        playersTable.className = "players col-md-12";
+        this.finanizeUpdates();
     }
 
     toggleButton(selector, value){
-        let button = document.querySelector(selector);
-        button.disabled = value ? undefined : "disabled";
+        this.queue.push(() => {
+            let button = document.querySelector(selector);
+            button.disabled = value ? undefined : "disabled";
+        });
     }
 
     showStageScreen(stage){
-        let sections = ["#screen1","#screen2","#screen3"];
-        let sectionToShow = `#screen${stage}`;
-        let sectionsToHide = sections.filter(x => x != sectionToShow);
-
-        sectionsToHide.forEach(section => {
-            $(section).fadeOut();
+        this.queue.push(() => {
+            let sections = ["#screen1","#screen2","#screen3"];
+            let sectionToShow = `#screen${stage}`;
+            let sectionsToHide = sections.filter(x => x != sectionToShow);
+    
+            sectionsToHide.forEach(section => {
+                $(section).fadeOut();
+            });
+            setTimeout(() => $(sectionToShow).fadeIn(), 400);
         });
-        setTimeout(() => $(sectionToShow).fadeIn(), 400);
+
+        this.finanizeUpdates();
     }
 }

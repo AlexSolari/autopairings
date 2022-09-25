@@ -1,5 +1,5 @@
 .hidden{
-    display: none;
+    display: none !important;
     visibility: hidden;
 }
 .content-container{
@@ -90,4 +90,22 @@ header h4{
     bottom: 2px;
     left: 4px;
     opacity: .7 !important;
+}
+.card-container{
+    margin: 0 auto;
+    margin-bottom: 1em;
+}
+.row{
+    padding-bottom: 2em;
+}
+@media screen and (max-width: 1220px){
+    .row{
+        flex-direction: column;
+    }
+    .players, .tables{
+        max-width: 100%;
+    }
+    .card-container .card{
+        margin: 0 auto;
+    }
 }
