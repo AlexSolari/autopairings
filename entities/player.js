@@ -9,5 +9,6 @@ export default class Player{
         this.GamesLost = 0;
         this.GamesPlayed = 0;
         this.Opponents = [];
+        this.SeededPosition = 0;
     }
 }

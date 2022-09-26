@@ -27,7 +27,6 @@ section{
 #staging, #tables ul{
     display: inline-block;
     text-align: left;
-    padding: 0px 20px;
 }
 #tables ul li{
     list-style: none;
@@ -35,16 +34,25 @@ section{
 .name{
     min-width: 100px;
     display: inline-block;
+    height: 40px;
 }
 #staging .name{
     margin-left: 32px;
+}
+#reorder{
+    margin-top: 1em;
+}
+#custom-matching-reminder{
+    color: green;
+    padding-top: 1em;
 }
 #tables{
     display: inline-flex;
     width: 100%;
 }
 #tables em{
-    display: contents;
+    padding-top: 5em;
+    width: inherit;
 }
 #tables li{
     padding: .3em;
@@ -62,7 +70,7 @@ section{
     position: absolute;
     width: 28px;
     height: 100%;
-    padding: 12px 10px 12px 0;
+    padding: 8px 10px 12px 0;
 }
 header{
     color: white;
@@ -76,14 +84,12 @@ header h4{
     top: 7px;
     right: 14px;
 }
-.tables{
-    border-left: 1px solid lightgray;
-}
 .close.delete-player{
     position: relative;
     bottom: 2px;
     left: 4px;
     opacity: .2 !important;
+    margin-right: 4px;
 }
 .close.delete-player:hover{
     position: relative;
@@ -98,6 +104,12 @@ header h4{
 .row{
     padding-bottom: 2em;
 }
+.list-group-item {
+    padding: 0.5rem 1rem;
+}
+.card-body ul{
+    padding: 0;
+}
 @media screen and (max-width: 1220px){
     .row{
         flex-direction: column;
@@ -107,5 +119,8 @@ header h4{
     }
     .card-container .card{
         margin: 0 auto;
+    }
+    #staging{
+        display: block;
     }
 }

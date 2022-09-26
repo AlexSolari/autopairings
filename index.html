@@ -64,6 +64,8 @@
                     <h3>Players</h3>
                     <ol id="staging" class="list-group">
                     </ol>
+                    <input type="button" class="btn btn-outline-primary hidden" id="reorder" value="Use custom matching for first round" onclick="engine.useCustomMatching()"/>
+                    <div id="custom-matching-reminder" class="hidden">Custom matching for round one active.</div>
                 </div>
                 <div class="tables col-md-8 remove-at-end">
                     <h3>Tables</h3>
@@ -88,6 +90,12 @@
             <span class="badge badge-pill"> WR: {wr}</span>
             <button type="button" class="close delete-player remove-at-end" onclick="engine.removePlayer('{id}')" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
+            </button>
+            <button type="button" class="close player-reorder remove-at-end hidden" onclick="engine.moveUp('{id}')" aria-label="Close">
+                <span aria-hidden="true">&#11014;</span>
+            </button>
+            <button type="button" class="close player-reorder remove-at-end hidden" onclick="engine.moveDown('{id}')" aria-label="Close">
+                <span aria-hidden="true">&#11015;</span>
             </button>
         </li>
     </script>

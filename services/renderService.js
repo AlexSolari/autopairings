@@ -25,6 +25,13 @@ export default class RenderService{
         });
     }
 
+    show(selector){
+        this.queue.push(() => {
+            let nodes = Array.from(document.querySelectorAll(selector));
+            nodes.forEach(n => n.className = n.className.replace("hidden", ""));
+        });
+    }
+
     finanizeUpdates(){
         window.requestAnimationFrame(() => {
             this.queue.forEach((update) => {

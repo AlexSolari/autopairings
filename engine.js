@@ -16,6 +16,7 @@ export default class TournamentEngine {
         this.LoserPoints = 1;
         this.Stage = 0;
         this.TournamentInProgress = false;
+        this.CustomMatchingEditing = false;
     }
 
     get isRoundInProgress() {
@@ -43,7 +44,14 @@ export default class TournamentEngine {
                 Points: newPlayer.Points,
                 OWR: 0,
                 WR: 0
-            })
+            });
+
+            if (!this.CustomMatchingEditing)
+                this.RenderService.show("#reorder");
+            else{
+                this.useCustomMatching();
+            }
+
             this.updateUi();
         }
 
@@ -51,8 +59,9 @@ export default class TournamentEngine {
     }
 
     nextRound() {
-        this.BackupPlayers = this.Players;
+        this.CustomMatchingEditing = false;
         this.TournamentInProgress = true;
+        this.BackupPlayers = this.Players;
         this.PairingService.initialize(this.Players);
         this.Tables = this.PairingService.makeTables();
         this.Tables.forEach(t => 
@@ -64,6 +73,9 @@ export default class TournamentEngine {
         );
         this.Stats = this.PairingService.Stats;
 
+        this.RenderService.hide("#reorder");
+        this.RenderService.hide("#custom-matching-reminder");
+        this.RenderService.hide("button.player-reorder");
         this.updateUi();
     }
 
@@ -161,8 +173,10 @@ export default class TournamentEngine {
                 return pDiff;
             else if (owrDiff != 0)
                 return owrDiff;
-            else 
+            else if (wrDiff != 0)
                 return wrDiff;
+            else 
+                return p1.Seed - p2.Seed;
         }).forEach((player, index) => {
             stagingHtml += this.RenderService.render("stagingRowTemplate", { place: index + 1, ...player });
         });
@@ -175,6 +189,12 @@ export default class TournamentEngine {
 
         this.RenderService.toggleButton("#tournamentEndButton", canProceedWithTournament);
         this.RenderService.toggleButton("#nextRoundButton", canProceedWithTournament);
+
+        if (this.CustomMatchingEditing){    
+            this.RenderService.hide("#reorder");
+            this.RenderService.show("button.player-reorder");
+            this.RenderService.show("#custom-matching-reminder");
+        }
 
         this.RenderService.finanizeUpdates();
     }
@@ -258,6 +278,56 @@ export default class TournamentEngine {
                 this.Stats = this.PairingService.Stats;
             }
         }
+        
+        this.updateUi();
+    }
+
+    useCustomMatching(){
+        this.CustomMatchingEditing = true;
+
+        this.Players.forEach((player, index) => {
+            player.SeededPosition = index;
+        });
+
+        this.RenderService.hide("#reorder");
+        this.RenderService.show("button.player-reorder");
+        this.RenderService.show("#custom-matching-reminder");
+        this.RenderService.finanizeUpdates();
+    }
+
+    moveUp(id){
+        const player = this.Players.find(p => p.Id == id);
+        const currentIndex = this.Players.indexOf(player);
+        const upPlayer = this.Players[currentIndex - 1];
+
+        if (upPlayer){
+            this._swapPlayers(player, upPlayer);
+        }
+    }
+
+    moveDown(id){
+        const player = this.Players.find(p => p.Id == id);
+        const currentIndex = this.Players.indexOf(player);
+        const downPlayer = this.Players[currentIndex + 1];
+
+        if (downPlayer){
+            this._swapPlayers(player, downPlayer);
+        }
+    }
+
+    _swapPlayers(player1, player2){
+        const temp = player1.SeededPosition;
+        player1.SeededPosition = player2.SeededPosition;
+        player2.SeededPosition = temp;
+
+        this.Players = this.Players.sort((p1, p2) => p1.SeededPosition - p2.SeededPosition); 
+        this.Players.forEach((player, index) => {
+            player.SeededPosition = index;
+        });
+
+        this.PairingService.initialize(this.Players);
+        this.PairingService.recalculateStats();
+        this.Stats = this.PairingService.Stats;
         
         this.updateUi();
     }

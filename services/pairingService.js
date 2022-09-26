@@ -30,7 +30,8 @@ export default class PairingService {
                             Name: p1.Name,
                             Points: p1.Points,
                             OWR: p1OppsWR.toFixed(2),
-                            WR: p1WR.toFixed(2)
+                            WR: p1WR.toFixed(2),
+                            Seed: p1.SeededPosition
                         });
             });
     }
@@ -54,12 +55,13 @@ export default class PairingService {
         const orderedPlayers = this.Players
             .sort((p1, p2) => Math.random() > 0.5 ? -1 : 1) //shuffle
             .sort((p1, p2) => {
-                let pointsDiff = p2.Points - p1.Points;
+                const pointsDiff = p2.Points - p1.Points;
+                const seedPosDiff = p1.SeededPosition - p2.SeededPosition;
                 let oppMWDiff = 0;
                 let gameMWDiff = 0; 
 
-                let p1Opps = this.Players.filter(x => p1.Opponents.indexOf(x.Id) >= 0);
-                let p2Opps = this.Players.filter(x => p2.Opponents.indexOf(x.Id) >= 0);
+                const p1Opps = this.Players.filter(x => p1.Opponents.indexOf(x.Id) >= 0);
+                const p2Opps = this.Players.filter(x => p2.Opponents.indexOf(x.Id) >= 0);
                 let p1OppsWR = 0;
                 let p2OppsWR = 0;
                 let p1WR = 0;
@@ -80,8 +82,10 @@ export default class PairingService {
                     return pointsDiff;
                 else if (oppMWDiff != 0)
                     return oppMWDiff;
-                else
+                else if (gameMWDiff != 0)
                     return gameMWDiff;
+                else
+                    return seedPosDiff;
             }); //sort
         const playerGroups = chunk(orderedPlayers, targetPlayerCountPerTable);
         const tables = playerGroups.map(group => new Table(group));
