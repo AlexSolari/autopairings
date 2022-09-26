@@ -74,9 +74,10 @@ export default class RenderService{
             let sectionsToHide = sections.filter(x => x != sectionToShow);
     
             sectionsToHide.forEach(section => {
-                $(section).fadeOut();
+                document.querySelector(section).className += " hidden";
             });
-            setTimeout(() => $(sectionToShow).fadeIn(), 400);
+            const $section = document.querySelector(sectionToShow);
+            $section.className = $section.className.replace("hidden", "");
         });
 
         this.finanizeUpdates();
